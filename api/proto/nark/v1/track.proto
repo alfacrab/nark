@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package nark.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/gulfik/nark/gen/go/nark/v1;narkv1";
+
+// TrackIngest is the public, frontend-facing entry point of the platform.
+//
+// The service is intentionally write-only and best-effort: it acknowledges a
+// batch as soon as it is durable enough for the caller to forget about it, and
+// performs the transport to Kafka asynchronously.
+service TrackIngestService {
+  // Push accepts a batch of data-tracks collected by a frontend SDK.
+  //
+  // A gRPC OK status (HTTP/2 status 200 for grpc-web callers) means the batch
+  // was accepted for delivery, not that it already reached storage.
+  rpc Push(PushRequest) returns (PushResponse);
+}
+
+// TrackKind is the coarse classification used for routing and dashboards.
+enum TrackKind {
+  TRACK_KIND_UNSPECIFIED = 0;
+  // User interaction: click, scroll, input, navigation.
+  TRACK_KIND_ACTION = 1;
+  // Application or domain event: signup_started, cart_updated.
+  TRACK_KIND_EVENT = 2;
+  // Business goal reached, usually carrying `value`: purchase, subscription.
+  TRACK_KIND_GOAL = 3;
+  // Client-side measurement: web vitals, api latency, error rate.
+  TRACK_KIND_TELEMETRY = 4;
+}
+
+// Client describes the frontend that produced the batch. It is sent once per
+// batch instead of being repeated on every track.
+message Client {
+  string app = 1;
+  string app_version = 2;
+  string sdk_version = 3;
+  string platform = 4;
+  string user_agent = 5;
+  string locale = 6;
+  string timezone = 7;
+}
+
+// Page is the document context a track was recorded on.
+message Page {
+  string url = 1;
+  string path = 2;
+  string referrer = 3;
+  string title = 4;
+}
+
+// Track is a single data point recorded on the client.
+message Track {
+  // Client generated identifier, used as the idempotency key all the way down
+  // to the ReplacingMergeTree table in ClickHouse.
+  string id = 1;
+  TrackKind kind = 2;
+  string name = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+  string user_id = 5;
+  string session_id = 6;
+  string device_id = 7;
+  Page page = 8;
+  // Free-form string dimensions.
+  map<string, string> attributes = 9;
+  // Free-form numeric measurements.
+  map<string, double> metrics = 10;
+  // Monetary or scoring value, meaningful for TRACK_KIND_GOAL.
+  double value = 11;
+  string currency = 12;
+  uint32 duration_ms = 13;
+}
+
+message PushRequest {
+  // Optional client generated batch identifier, echoed back in the response.
+  string batch_id = 1;
+  Client client = 2;
+  repeated Track tracks = 3;
+}
+
+// TrackError explains why a single track of the batch was not accepted. The
+// rest of the batch is still delivered.
+message TrackError {
+  string track_id = 1;
+  string reason = 2;
+}
+
+message PushResponse {
+  string batch_id = 1;
+  uint32 accepted = 2;
+  uint32 rejected = 3;
+  repeated TrackError errors = 4;
+}

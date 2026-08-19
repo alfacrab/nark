@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package nark.v1;
+
+import "google/protobuf/timestamp.proto";
+import "nark/v1/track.proto";
+
+option go_package = "github.com/gulfik/nark/gen/go/nark/v1;narkv1";
+
+// TrackEnvelope is the internal Kafka payload. It is deliberately separate from
+// the public PushRequest so the ingest contract and the storage contract can
+// evolve independently.
+message TrackEnvelope {
+  Track track = 1;
+  Client client = 2;
+  string batch_id = 3;
+  // Server time the collector accepted the batch. Used as the version column
+  // for ReplacingMergeTree deduplication.
+  google.protobuf.Timestamp received_at = 4;
+  // Identifier of the collector instance that accepted the batch.
+  string collector_id = 5;
+  // Correlation id propagated from the caller when available.
+  string trace_id = 6;
+}
