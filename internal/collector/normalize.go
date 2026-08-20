@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	narkv1 "github.com/alfacrab/nark/gen/go/nark/v1"
+	narkv1 "github.com/thetuposoft/nark/gen/go/nark/v1"
 )
 
 // Field limits applied to every accepted track. They protect ClickHouse from

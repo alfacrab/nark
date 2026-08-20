@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/alfacrab/nark/internal/config"
+	"github.com/thetuposoft/nark/internal/config"
 )
 
 // NewLogger builds the process logger. Every record carries the service, env and instance labels so logs can be correlated with metrics.

@@ -5,7 +5,7 @@ package nark.v1;
 import "google/protobuf/timestamp.proto";
 import "nark/v1/track.proto";
 
-option go_package = "github.com/alfacrab/nark/gen/go/nark/v1;narkv1";
+option go_package = "github.com/thetuposoft/nark/gen/go/nark/v1;narkv1";
 
 // TrackEnvelope is the internal Kafka payload. It is deliberately separate from
 // the public PushRequest so the ingest contract and the storage contract can

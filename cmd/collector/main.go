@@ -10,9 +10,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/alfacrab/nark/internal/collector"
-	"github.com/alfacrab/nark/internal/config"
-	"github.com/alfacrab/nark/internal/observability"
+	"github.com/thetuposoft/nark/internal/collector"
+	"github.com/thetuposoft/nark/internal/config"
+	"github.com/thetuposoft/nark/internal/observability"
 )
 
 func main() {

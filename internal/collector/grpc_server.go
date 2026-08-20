@@ -4,12 +4,12 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/alfacrab/nark/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 
-	narkv1 "github.com/alfacrab/nark/gen/go/nark/v1"
+	narkv1 "github.com/thetuposoft/nark/gen/go/nark/v1"
+	"github.com/thetuposoft/nark/internal/config"
 )
 
 func NewGRPCServer(cfg config.Collector, service *Service, log *slog.Logger) *grpc.Server {

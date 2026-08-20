@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/alfacrab/nark/internal/config"
-	"github.com/alfacrab/nark/internal/workerpool"
+	"github.com/thetuposoft/nark/internal/config"
+	"github.com/thetuposoft/nark/internal/workerpool"
 )
 
 // newPublisherPool gives every worker a dedicated Kafka producer, so

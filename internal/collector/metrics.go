@@ -5,7 +5,7 @@ import (
 
 	"github.com/VictoriaMetrics/metrics"
 
-	"github.com/alfacrab/nark/internal/observability"
+	"github.com/thetuposoft/nark/internal/observability"
 )
 
 // Results reported on nark_collector_requests_total.

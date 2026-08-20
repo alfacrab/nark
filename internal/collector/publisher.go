@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	narkv1 "github.com/alfacrab/nark/gen/go/nark/v1"
-	// "github.com/alfacrab/nark/internal/kafkax"
-	"github.com/alfacrab/nark/internal/workerpool"
+	narkv1 "github.com/thetuposoft/nark/gen/go/nark/v1"
+	// "github.com/thetuposoft/nark/internal/kafkax"
+	"github.com/thetuposoft/nark/internal/workerpool"
 )
 
 // PublishJob is one accepted batch on its way to Kafka. Serialization happens in

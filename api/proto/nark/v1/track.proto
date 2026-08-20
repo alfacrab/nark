@@ -4,7 +4,7 @@ package nark.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/alfacrab/nark/gen/go/nark/v1;narkv1";
+option go_package = "github.com/thetuposoft/nark/gen/go/nark/v1;narkv1";
 
 // TrackIngest is the public, frontend-facing entry point of the platform.
 //

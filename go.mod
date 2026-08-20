@@ -1,4 +1,4 @@
-module github.com/alfacrab/nark
+module github.com/thetuposoft/nark
 
 go 1.26.5
 

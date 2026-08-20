@@ -8,7 +8,7 @@ import (
 
 	"github.com/VictoriaMetrics/metrics"
 
-	"github.com/alfacrab/nark/internal/config"
+	"github.com/thetuposoft/nark/internal/config"
 )
 
 // Registry is a thin wrapper around a VictoriaMetrics metric set.

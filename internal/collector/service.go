@@ -11,11 +11,11 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	narkv1 "github.com/alfacrab/nark/gen/go/nark/v1"
-	"github.com/alfacrab/nark/internal/config"
+	narkv1 "github.com/thetuposoft/nark/gen/go/nark/v1"
+	"github.com/thetuposoft/nark/internal/config"
 
-	// "github.com/alfacrab/nark/internal/trackx"
-	"github.com/alfacrab/nark/internal/workerpool"
+	// "github.com/thetuposoft/nark/internal/trackx"
+	"github.com/thetuposoft/nark/internal/workerpool"
 )
 
 // Submitter hands accepted batches to the worker pool.
