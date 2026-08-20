@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/alfacrab/nark/internal/collector"
 	"github.com/alfacrab/nark/internal/config"
 	"github.com/alfacrab/nark/internal/observability"
 )
@@ -28,10 +30,33 @@ func run() error {
 
 	log := observability.NewLogger(os.Stdout, cfg.Runtime)
 
+	registry := observability.NewRegistry()
+	registry.Publish()
+	metrics := collector.NewMetrics(registry)
+
+	if err := observability.StartPush(cfg.Metrics, cfg.Runtime, log); err != nil {
+		return err
+	}
+
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
+	pool, err := collector.NewPublisherPool(ctx, cfg, metrics, log)
+	if err != nil {
+		return err
+	}
+
+	metrics.PoolGauges(pool)
+
+	service := collector.NewService(cfg, pool, metrics, log)
+	grpcServer := collector.NewGRPCServer(cfg, service, log)
+	listener, err := net.Listen("tcp", cfg.GRPCAddr)
+	if err != nil {
+		return fmt.Errorf("listen %s: %w", cfg.GRPCAddr, err)
+	}
+
 	grpcErrs := make(chan error, 1)
+
 	go func() {
 		log.Info("grpc server listening",
 			slog.String("addr", cfg.GRPCAddr),
@@ -40,10 +65,10 @@ func run() error {
 			slog.String("topic", cfg.Producer.Topic),
 		)
 
-		// if err := grpcServer.Serve(listener); err != nil {
-		// 	grpcErrs <- err
-		// 	return
-		// }
+		if err := grpcServer.Serve(listener); err != nil {
+			grpcErrs <- err
+			return
+		}
 
 		close(grpcErrs)
 	}()

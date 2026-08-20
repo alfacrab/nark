@@ -4,6 +4,26 @@ plugins:
   - local: protoc-gen-go
     out: gen/go
     opt: paths=source_relative
+
   - local: protoc-gen-go-grpc
     out: gen/go
     opt: paths=source_relative
+
+  - local: protoc-gen-js
+    out: gen/web
+    opt:
+      - import_style=commonjs
+
+  - local: protoc-gen-grpc-web
+    out: gen/web
+    opt:
+      - mode=grpcweb
+      - import_style=commonjs+dts
+
+  - local: protoc-gen-es
+    opt: target=ts
+    out: tools/gen
+
+  - local: protoc-gen-connect-es
+    opt: target=ts
+    out: tools/gen

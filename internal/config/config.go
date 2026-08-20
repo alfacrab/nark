@@ -26,6 +26,7 @@ func LoadCollector(src Source) (Collector, error) {
 	cfg := Collector{
 		Runtime: r.runtime("nark-collector", ":9091"),
 		Metrics: r.metrics(),
+
 		Producer: Producer{
 			Brokers:     r.list("NARK_KAFKA_BROKERS", []string{"localhost:9092"}),
 			Topic:       r.str("NARK_KAFKA_TOPIC", "nark.tracks"),
@@ -35,6 +36,7 @@ func LoadCollector(src Source) (Collector, error) {
 			BatchTimeout: r.duration("NARK_KAFKA_BATCH_TIMEOUT", 50*time.Millisecond),
 			WriteTimeout: r.duration("NARK_KAFKA_WRITE_TIMEOUT", 5*time.Second),
 		},
+
 		Pool: Pool{
 			Workers:        r.integer("NARK_POOL_WORKERS", 8),
 			QueueSize:      r.integer("NARK_POOL_QUEUE_SIZE", 4096),
@@ -42,6 +44,7 @@ func LoadCollector(src Source) (Collector, error) {
 			OverflowPolicy: r.enum("NARK_POOL_OVERFLOW_POLICY", OverflowDrop, OverflowDrop, OverflowReject),
 			FlushTimeout:   r.duration("NARK_POOL_FLUSH_TIMEOUT", 15*time.Second),
 		},
+
 		GRPCAddr:        r.str("NARK_GRPC_ADDR", ":9090"),
 		MaxRecvMsgBytes: r.integer("NARK_GRPC_MAX_RECV_BYTES", 4<<20),
 		MaxBatchTracks:  r.integer("NARK_MAX_BATCH_TRACKS", 500),
